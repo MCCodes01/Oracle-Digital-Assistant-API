@@ -1,0 +1,31 @@
+import java.net.URI;
+import java.util.concurrent.Future;
+
+import com.oracle.bots.client.*;
+import com.oracle.bots.data.*;
+import com.oracle.bots.services.*;
+import com.oracle.bots.util.*;
+
+public class OracleDigitalAssistantAPIExample {
+   public static void main(String[] args) throws Exception {
+       String url = "https://mydigitalassistant.my.oraclecloud.com";
+       String apiKey = "my-api-key";
+
+       OracleBotClient client = new OracleBotClient();
+       client.setBaseURI(new URI(url));
+       client.setAuthentication(new OracleBotClientAPIKeyAuthentication(apiKey));
+
+       OracleBotService service = new OracleBotService(client);
+
+       String sessionId = service.startSession("my-channel-id");
+
+       OracleBotMessage message = new OracleBotMessage();
+       message.setText("Hello, chatbot!");
+
+       Future<OracleBotResponse> future = service.sendMessage(sessionId, message);
+
+       OracleBotResponse response = future.get();
+
+       System.out.println(response.getText());
+   }
+}
